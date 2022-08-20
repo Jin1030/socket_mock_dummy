@@ -16,8 +16,8 @@ def Interact_with_csb(host, port, jsonfile):
     # Connect to the csb server
     print("\n>> connecting to: %s:%s" % (host, port))
     sock.connect((host, port))
-
-	# Send startinstallation to CSB server
+    
+    # Send startinstallation to CSB server
     sock.send("startinstallation".encode())
 
     # Receive the message from CSB server
@@ -27,17 +27,17 @@ def Interact_with_csb(host, port, jsonfile):
         sys.exit()
     elif "fetch the information" in data.decode():
         print("\n << fetch the information RECEIVED!")
-
         #send the json config file to CSB server
         json_data = json.dumps(jsonfile)
         sock.sendall(bytes(json_data,encoding="utf-8"))
     else:
         sys.exit()
 
-'''
-this function is used to read the json file
-'''
+
 def read_configfile(filepath):
+    '''
+    this function is used to read the json file
+    '''
     with open(filepath) as json_file:
         file_loaded = json.load(json_file)
         print(file_loaded)
@@ -46,13 +46,12 @@ def read_configfile(filepath):
         return file_loaded
 
 
-
-def main():
-
+if __name__ == '__main__':
+    
+    # get configurations
     parser = argparse.ArgumentParser(description='This is the mockserver, which is used to interact with the csb server.')
     parser.add_argument('host', help='interface to be connected is;')
-    parser.add_argument('-p', metavar='PORT', type=int, default=8000,
-                        help='the port to be connected is')
+    parser.add_argument('-p', metavar='PORT', type=int, default=8000, help='the port to be connected is')
     parser.add_argument('-f', help='the path to config json file', default = config.json)
     args = parser.parse_args()
     print(args)
@@ -64,7 +63,3 @@ def main():
     
     # interact with csb server
     Interact_with_csb(csb_host, csb_port, config_json)
-
-
-
-main()
