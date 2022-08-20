@@ -33,6 +33,7 @@ def csb_server(host, port):
                 return data
             except :
                 sys.exit("no data RECEIVED!")
+        
         data = recv_data()
 
         if "startinstallation" in data.decode():
@@ -53,27 +54,20 @@ def csb_server(host, port):
             # download the files from local http server
             urllib.request.urlretrieve("http://"+reply['ip']+":"+reply['port']+"/test/csb_conf.txt", "/home/user/csb_conf.txt")
             break
-
         else:
             print("\n << startinstallation not RECEIVED!")
             break
 
     sock.close()
 
-
-
-
-def main():
-
+    
+if __name__ == '__main__':
+    # get configurations
     parser = argparse.ArgumentParser(description='This is the csb server, which is used to simulate csb software.')
     parser.add_argument('host', help='interface that the server listens at;')
-    parser.add_argument('-p', metavar='PORT', type=int, default=8000,
-                        help='TCP port (default 8000)')
+    parser.add_argument('-p', metavar='PORT', type=int, default=8000, help='TCP port (default 8000)')
     args = parser.parse_args()
     print(args)
 
     # establish the csb server
     csb_server(args.host, args.p)
-
-
-main()
